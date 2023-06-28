@@ -1,24 +1,40 @@
+import throttle from "lodash.throttle";
 
-import _ from "lodash.throttle";
+const STORAGE_KEY = "feedback-form-state";
+
 const form = document.querySelector(".feedback-form");
-const data = localStorage.getItem("feedback");
-form.addEventListener("input", _(updateStorage, 500));
-form.addEventListener("submit", clearStorage);
-function updateStorage(e) {
-    const local = JSON.parse(localStorage.getItem("feedback")) ?? { email: null, message: null };
-    local[e.target.name] = e.target.value;
-    localStorage.setItem("feedback", JSON.stringify(local))
+
+form.addEventListener("input", throttle(onInputData, 500));
+form.addEventListener("submit", onFormSubmit);
+
+let dataForm = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+const { email, message } = form.elements;
+reloadPage();
+
+function onInputData(event) {
+    dataForm = { email: email.value, message: message.value };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForm));
 }
-function checkStorage() {
-    if (!data) return;
-    const parsed = JSON.parse(data)
-    form.email.value = parsed.email;
-    form.message.value = parsed.message;
+
+function reloadPage() {
+    if (dataForm) {
+        email.value = dataForm.email || "";
+        message.value = dataForm.message || "";
+    }
 }
-function clearStorage(e) {
+function onFormSubmit(e) {
     e.preventDefault();
-    console.log(JSON.parse(localStorage.getItem("feedback")));
-    localStorage.removeItem("feedback");
-    e.target.reset();
+    console.log({ email: email.value, message: message.value });
+
+    if (email.value === "" || message.value === "") {
+        return alert(`Будь ласка, заповніть всі обов'язкові поля.`);
+    }
+
+    localStorage.removeItem(STORAGE_KEY);
+    e.currentTarget.reset();
 }
-checkStorage();
+function onFormvalue(e) {
+    feedback.emeil = e.currentTarget.value;
+
+    localStorage.setItem(feedback_form, JSON.stringify(feedback));
+}
