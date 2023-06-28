@@ -29,6 +29,7 @@ form.addEventListener('submit', (event) => {
     event.preventDefault();
     // Очищуємо сховище
     localStorage.removeItem('feedback-form-state');
+    console.log(formData);
     // Очищуємо поля форми
     emailInput.value = '';
     messageInput.value = '';
@@ -37,5 +38,5 @@ form.addEventListener('submit', (event) => {
         email: emailInput.value,
         message: messageInput.value
     };
-    console.log(formData);
+
 });
