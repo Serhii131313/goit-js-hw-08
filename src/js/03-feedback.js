@@ -27,16 +27,18 @@ form.addEventListener('input', saveFormState);
 // Обробник події submit форми
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    // Очищуємо сховище
-    localStorage.removeItem('feedback-form-state');
-    console.log(formData);
-    // Очищуємо поля форми
-    emailInput.value = '';
-    messageInput.value = '';
+
     // Виводимо об'єкт з поточними значеннями у консоль
     const formData = {
         email: emailInput.value,
         message: messageInput.value
     };
+    console.log(formData);
 
+    // Очищуємо сховище
+    localStorage.removeItem('feedback-form-state');
+
+    // Очищуємо поля форми
+    emailInput.value = '';
+    messageInput.value = '';
 });
